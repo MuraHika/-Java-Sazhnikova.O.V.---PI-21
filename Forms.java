@@ -21,6 +21,7 @@ public class Forms {
 	public Tractor tractor;
 	public DrawPanel panel;
 	public JButton buttonCreate;
+	public JButton buttonCreateWithLadle;
 	public JButton buttonUp;
 	public JButton buttonDown;
 	public JButton buttonRight;
@@ -70,6 +71,20 @@ public class Forms {
 		buttonCreate.setFont(new Font("Verdana", Font.PLAIN, 14));
 		buttonCreate.setBounds(frame.getWidth() - 230, 20, 200, 60);
 		frame.getContentPane().add(buttonCreate);
+		
+		buttonCreateWithLadle = new JButton("CREATE TRACTOR WITH LADLE");
+		buttonCreateWithLadle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				tractor = new TractorWithLadle(rnd.nextInt(200), rnd.nextInt(1000), Color.RED, Color.BLACK, Color.BLUE,
+						true);
+				tractor.SetPosition(rnd.nextInt(150) + 50, rnd.nextInt(150) + 50, panel.getWidth(), panel.getHeight());
+				panel.addTractor(tractor);
+				panel.repaint();
+			}
+		});
+		buttonCreateWithLadle.setFont(new Font("Verdana", Font.PLAIN, 14));
+		buttonCreateWithLadle.setBounds(frame.getWidth() - 230, 100, 200, 60);
+		frame.getContentPane().add(buttonCreateWithLadle);
 
 		JButton buttonUp = new JButton();
 		ImageIcon IconUp = new ImageIcon("D:\\Hikaro\\Digital\\Up.png");
