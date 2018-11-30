@@ -4,39 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Tractor {
-	private float _startPosX;
-	private float _startPosY;
-
-	private int _ScreenWidth;
-	private int _ScreenHeight;
-
 	private int tractorWidth = 100;
 	private int tractorHeight = 100;
 
-	public boolean Crane;
-
-	public int MaxSpeed;
-
-	public float Weight;
-
-	public Color MainColor;
-	public Color DopColor;
-	public Color GlassColor;
-
-	public Tractor(int maxSpeed, float weight, Color mainColor, Color dopColor, Color glassColor, boolean crane) {
+	public Tractor(int maxSpeed, float weight, Color mainColor) {
 		MaxSpeed = maxSpeed;
 		Weight = weight;
-		MainColor = mainColor;
-		DopColor = dopColor;
-		GlassColor = glassColor;
-		Crane = crane;
-	}
-
-	public void SetPosition(int x, int y, int width, int height) {
-		_startPosX = x;
-		_startPosY = y;
-		_ScreenHeight = height;
-		_ScreenWidth = width;
+		MainColor = mainColor;		
 	}
 
 	public void MoveTransport(Direction direction) {
