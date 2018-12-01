@@ -6,16 +6,16 @@ import javax.swing.JPanel;
 
 public class DrawPanel extends JPanel {
 
-	private Tractor tractor;
+	private ITransport transport;
 
-	public void addTractor(Tractor tractor) {
-		this.tractor = tractor;
+	public void addTractor(ITransport transport) {
+		this.transport = transport;
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		if (tractor != null)
-			tractor.DrawTractor(g);
+		if (transport != null)
+			transport.DrawTractor(g);
 	}
 }
