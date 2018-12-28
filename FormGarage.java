@@ -26,6 +26,7 @@ public class FormGarage extends JFrame {
 	private ITransport transport;
 	private MultiLevelGarage garage;
 	private final int countLevel = 5;
+	FormTractorConfig select;
 
 	public FormGarage() throws IOException {
 		initialize();
@@ -88,38 +89,22 @@ public class FormGarage extends JFrame {
 		buttonSetTractor = new JButton("Create Tractor");
 		buttonSetTractor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (listLevels.getSelectedIndex() > -1) {
-					Color MainColor = JColorChooser.showDialog(null, "Choose a Color", Color.RED);
-					transport = new Tractor(100, 1000, MainColor);
-					int place = garage.getParking(listLevels.getSelectedIndex()).AddTractor(transport);
-					if (place != -1) {
-						panelWithGarage.repaint();
+				select = new FormTractorConfig(frame);
+				if (select.res()) {
+					ITransport tractor = select.getTractor();
+					if (tractor != null) {
+						int place = garage.getParking(listLevels.getSelectedIndex()).AddTractor(tractor);
+
+						if (place != -1) {
+							panelWithGarage.repaint();
+						}
 					}
-					panelWithGarage.repaint();
+					panel.repaint();
 				}
 			}
 		});
 		buttonSetTractor.setBounds(665, 19, 220, 60);
 		frame.add(buttonSetTractor);
-
-		buttonSetTractorWithLadle = new JButton("Create Tractor With Ladle");
-		buttonSetTractorWithLadle.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (listLevels.getSelectedIndex() > -1) {
-					Color MainColor = JColorChooser.showDialog(null, "Choose a Color", Color.RED);
-					Color DopColor = JColorChooser.showDialog(null, "Choose a Color", Color.BLACK);
-					Color GlassColor = JColorChooser.showDialog(null, "Choose a Color", Color.BLUE);
-					transport = new TractorWithLadle(100, 1000, MainColor, DopColor, GlassColor, true);
-					int place = garage.getParking(listLevels.getSelectedIndex()).AddTractor(transport);
-					if (place != -1) {
-						panelWithGarage.repaint();
-					}
-					panelWithGarage.repaint();
-				}
-			}
-		});
-		buttonSetTractorWithLadle.setBounds(665, 100, 220, 60);
-		frame.add(buttonSetTractorWithLadle);
 
 		garage = new MultiLevelGarage(countLevel, panelWithGarage.getWidth(), panelWithGarage.getHeight());
 		panelWithGarage.setParking(garage);
