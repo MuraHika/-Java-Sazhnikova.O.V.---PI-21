@@ -83,4 +83,12 @@ public class Garage<T extends ITransport> {
 			g.drawLine(i * _placeSizeWidth, 0, i * _placeSizeWidth, ScreenHeight);
 		}
 	}
+	
+	public T getTractor(int index) {
+		if (_places.get(index) != null) {
+			return _places.get(index);
+		} else {
+			return null;
+		}
+	}
 }
