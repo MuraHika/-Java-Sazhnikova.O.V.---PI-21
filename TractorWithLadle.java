@@ -74,4 +74,8 @@ public class TractorWithLadle extends Tractor {
 		g.fillOval(PosX - 50, PosY + 10, 35, 35);
 		g.fillOval(PosX - 10, PosY + 20, 25, 25);
 	}
+	
+	public void SetDopColor(Color color) {
+		DopColor = color;
+	}
 }
