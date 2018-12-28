@@ -1,14 +1,16 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Garage<T extends ITransport> {
 
-	ArrayList<T> _places;
 	private int _placeSizeWidth = 250;
 	private int _placeSizeHeight = 80;
 	private int ScreenWidth;
 	private int ScreenHeight;
+	private HashMap<Integer, T> _places;
+	private int _maxCount;
 
 	public int getPictureWidth() {
 		return ScreenWidth;
@@ -27,16 +29,17 @@ public class Garage<T extends ITransport> {
 	}
 
 	public Garage(int size, int pictureWidth, int pictureHeight) {
-		_places = new ArrayList<T>(size);
-		ScreenWidth = pictureWidth;
-		ScreenHeight = pictureHeight;
-		for (int i = 0; i < size; i++) {
-			_places.add(null);
-		}
+		_maxCount = size;
+		_places = new HashMap<Integer, T>();
+		this.ScreenWidth = pictureWidth;
+		this.ScreenHeight = pictureHeight;
 	}
 
 	public int AddTractor(T transport) {
-		for (int i = 0; i < _places.size(); i++) {
+		if (_places.size() == _maxCount) {
+			return -1;
+		}
+		for (int i = 0; i < _maxCount; i++) {
 			if (checkFreePlace(i)) {
 				_places.add(i, transport);
 				_places.get(i).SetPosition(5 + i / 5 * _placeSizeWidth + 5 + 50, i % 5 * _placeSizeHeight + 35,
@@ -60,22 +63,20 @@ public class Garage<T extends ITransport> {
 	}
 
 	private boolean checkFreePlace(int index) {
-		return _places.get(index) == null;
+		return !_places.containsKey(index);
 	}
 
 	public void Draw(Graphics g) {
 		DrawMarking(g);
-		for (int i = 0; i < _places.size(); i++) {
-			if (!checkFreePlace(i)) {
-				_places.get(i).DrawTractor(g);
-			}
+		for (T transport : _places.values()) {
+			transport.DrawTractor(g);
 		}
 	}
 
 	private void DrawMarking(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.drawRect(0, 0, ScreenWidth - 1, ScreenHeight - 1);
-		for (int i = 0; i < _places.size() / 6; i++) {
+		for (int i = 0; i < _maxCount / 6; i++) {
 			for (int j = 0; j < 7; ++j) {
 				g.drawLine(i * _placeSizeWidth, j * _placeSizeHeight, i * _placeSizeWidth + 110, j * _placeSizeHeight);
 			}
