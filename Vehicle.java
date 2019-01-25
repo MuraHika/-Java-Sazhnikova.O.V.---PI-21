@@ -10,14 +10,14 @@ public abstract class Vehicle implements ITransport {
 	protected int _ScreenWidth;
 	protected int _ScreenHeight;
 	public int MaxSpeed;
-	public float Weight;
+	public int Weight;
 	public Color MainColor;
  
 	public int getMaxSpeed() {
 		return MaxSpeed;
 	}
 
-	public float getWeight() {
+	public int getWeight() {
 		return Weight;
 	}
 
