@@ -35,9 +35,9 @@ public class Garage<T extends ITransport> {
 		this.ScreenHeight = pictureHeight;
 	}
 
-	public int AddTractor(T transport) {
+	public int AddTractor(T transport) throws GarageOverflowException, GarageOccupiedPlaceException {
 		if (_places.size() == _maxCount) {
-			return -1;
+			throw new GarageOverflowException();
 		}
 		for (int i = 0; i < _maxCount; i++) {
 			if (checkFreePlace(i)) {
@@ -47,10 +47,10 @@ public class Garage<T extends ITransport> {
 				return i;
 			}
 		}
-		return -1;
+		throw new GarageOccupiedPlaceException();
 	}
 
-	public T RemoveTractor(int index) {
+	public T RemoveTractor(int index) throws GarageNotFoundException {
 		if (index < 0 || index > _places.size()) {
 			return null;
 		}
@@ -59,7 +59,7 @@ public class Garage<T extends ITransport> {
 			_places.set(index, null);
 			return car;
 		}
-		return null;
+		throw new GarageNotFoundException();
 	}
 
 	private boolean checkFreePlace(int index) {
