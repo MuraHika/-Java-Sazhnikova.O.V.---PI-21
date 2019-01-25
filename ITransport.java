@@ -14,4 +14,6 @@ public interface ITransport {
 	void SwitchColor(Graphics g);
 	
 	void SetMainColor(Color color);
+	
+	String getInfo();
 }
