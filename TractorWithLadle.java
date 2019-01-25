@@ -2,8 +2,9 @@ package TractorForm;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
-public class TractorWithLadle extends Tractor {
+public class TractorWithLadle extends Tractor implements Serializable {
 
 	public Color DopColor;
 	public Color GlassColor;
@@ -37,7 +38,7 @@ public class TractorWithLadle extends Tractor {
 		String[] strs = info.split(";");
 		if (strs.length == 12) {
 			MaxSpeed = Integer.parseInt(strs[0]);
-			Weight = Float.parseFloat(strs[1]);
+			Weight = Integer.parseInt(strs[1]);
 			MainColor = new Color(Integer.parseInt(strs[2]), Integer.parseInt(strs[3]), Integer.parseInt(strs[4]));
 			DopColor = new Color(Integer.parseInt(strs[5]), Integer.parseInt(strs[6]), Integer.parseInt(strs[7]));
 			GlassColor = new Color(Integer.parseInt(strs[8]), Integer.parseInt(strs[9]), Integer.parseInt(strs[10]));
@@ -96,5 +97,67 @@ public class TractorWithLadle extends Tractor {
 		return MaxSpeed + ";" + Weight + ";" + MainColor.getRed() + ";" + MainColor.getGreen() + ";"
 				+ MainColor.getBlue() + ";" + DopColor.getRed() + ";" + DopColor.getGreen() + ";" + DopColor.getBlue()
 				+ ";" + GlassColor.getRed() + ";" + GlassColor.getGreen() + ";" + GlassColor.getBlue() + ";" + Crane;
+	}
+	
+	public int compareTo(TractorWithLadle another) {
+		if (another == null) {
+			return 1;
+		}
+		if (MaxSpeed != another.MaxSpeed) {
+			return Integer.valueOf(MaxSpeed).compareTo(another.MaxSpeed);
+		}
+		if (Weight != another.Weight) {
+			return Integer.valueOf(Weight).compareTo(another.Weight);
+		}
+		if (MainColor != another.MainColor) {
+			return Integer.valueOf(MainColor.getRGB()).compareTo(another.MainColor.getRGB());
+		}
+		if (DopColor != another.DopColor) {
+			return Integer.valueOf(DopColor.getRGB()).compareTo(another.DopColor.getRGB());
+		}
+		if (GlassColor != another.GlassColor) {
+			return Integer.valueOf(GlassColor.getRGB()).compareTo(another.GlassColor.getRGB());
+		}
+		if (Crane != another.Crane) {
+			return Boolean.valueOf(Crane).compareTo(another.Crane);
+		}
+		return 0;
+	}
+
+	@Override
+	public boolean equals(Object another) {
+		if (another == null) {
+			return false;
+		}
+		if (!(another instanceof TractorWithLadle)) {
+			return false;
+		}
+		TractorWithLadle tractor = (TractorWithLadle) another;
+		return equals(tractor);
+	}
+
+	public boolean equals(TractorWithLadle another) {
+		if (another == null) {
+			return false;
+		}
+		if (MaxSpeed != another.MaxSpeed) {
+			return false;
+		}
+		if (Weight != another.Weight) {
+			return false;
+		}
+		if (MainColor != another.MainColor) {
+			return false;
+		}
+		if (DopColor != another.DopColor) {
+			return false;
+		}
+		if (GlassColor != another.GlassColor) {
+			return false;
+		}
+		if (Crane != another.Crane) {
+			return false;
+		}
+		return true;
 	}
 }
