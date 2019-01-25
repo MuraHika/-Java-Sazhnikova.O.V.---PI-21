@@ -179,6 +179,17 @@ public class FormGarage extends JFrame {
 		buttonTakeTractor.setBounds(10, 39, 150, 23);
 		panelTakeTractorFromPlace.add(buttonTakeTractor);
 		
+		JButton btnSort = new JButton("Sort");
+		btnSort.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				garage.Sort();
+				panelWithGarage.repaint();
+				panel.repaint();
+			}
+		});
+		btnSort.setBounds(665, 130, 220, 34);
+		frame.add(btnSort);
+		
 		menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 100, 26);
 		frame.add(menuBar);
