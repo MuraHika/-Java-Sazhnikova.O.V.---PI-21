@@ -1,7 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Garage<T extends ITransport> implements Serializable, Comparable<Garage<T>>, Iterable<T>, Iterator<T> {
 
