@@ -2,8 +2,9 @@ package TractorForm;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
-public class Tractor extends Vehicle {
+public class Tractor extends Vehicle implements Serializable, Comparable<Tractor> {
 	private int tractorWidth = 100;
 	private int tractorHeight = 100;
 
@@ -17,7 +18,7 @@ public class Tractor extends Vehicle {
 		String[] strs = info.split(";");
 		if (strs.length == 5) {
 			MaxSpeed = Integer.parseInt(strs[0]);
-			Weight = Float.parseFloat(strs[1]);
+			Weight = Integer.parseInt(strs[1]);
 			MainColor = new Color(Integer.parseInt(strs[2]), Integer.parseInt(strs[3]), Integer.parseInt(strs[4]));
 		}
 	}
@@ -87,5 +88,50 @@ public class Tractor extends Vehicle {
 	public String getInfo() {
 		return MaxSpeed + ";" + Weight + ";" + MainColor.getRed() + ";" + MainColor.getGreen() + ";"
 				+ MainColor.getBlue();
+	}
+	
+	@Override
+	public int compareTo(Tractor another) {
+		if (another == null) {
+			return 1;
+		}
+		if (MaxSpeed != another.MaxSpeed) {
+			return Integer.valueOf(MaxSpeed).compareTo(another.MaxSpeed);
+		}
+		if (Weight != another.Weight) {
+			return Integer.valueOf(Weight).compareTo(another.Weight);
+		}
+		if (MainColor != another.MainColor) {
+			return Integer.valueOf(MainColor.getRGB()).compareTo(another.MainColor.getRGB());
+		}
+		return 0;
+	}
+
+	@Override
+	public boolean equals(Object another) {
+		if (another == null) {
+			return false;
+		}
+		if (!(another instanceof Tractor)) {
+			return false;
+		}
+		Tractor tractor = (Tractor) another;
+		return equals(tractor);
+	}
+
+	public boolean equals(Tractor another) {
+		if (another == null) {
+			return false;
+		}
+		if (MaxSpeed != another.MaxSpeed) {
+			return false;
+		}
+		if (Weight != another.Weight) {
+			return false;
+		}
+		if (MainColor != another.MainColor) {
+			return false;
+		}
+		return true;
 	}
 }
