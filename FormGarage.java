@@ -5,9 +5,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class FormGarage extends JFrame {
 
@@ -149,6 +151,51 @@ public class FormGarage extends JFrame {
 		});
 		buttonTakeTractor.setBounds(10, 39, 150, 23);
 		panelTakeTractorFromPlace.add(buttonTakeTractor);
+		
+		menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 100, 26);
+		frame.add(menuBar);
+		JMenu menufile = new JMenu("File");
+		menufile.setHorizontalAlignment(SwingConstants.CENTER);
+		menuBar.add(menufile);
+		JMenuItem save = new JMenuItem("Save File");
+		JMenuItem download = new JMenuItem("Open File");
+		menufile.add(save);
+		menufile.addSeparator();
+		menufile.add(download);
+
+		save.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChoser = new JFileChooser();
+                fileChoser.setFileFilter(new FileNameExtensionFilter("Text Files", ".txt"));
+                int ret = fileChoser.showDialog(null, "Сохранить файл");
+                if (ret == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChoser.getSelectedFile();
+                    if (garage.SaveData(file.getAbsolutePath())) {
+                        JOptionPane.showMessageDialog(frame, "Сохранение прошло успешно");
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Произошла ошибка");
+                    }
+                }
+            }
+
+		});
+		download.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+	                JFileChooser fileChoser = new JFileChooser();
+	                fileChoser.setFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
+	                int ret = fileChoser.showDialog(null, "Открыть файл");
+	                if (ret == JFileChooser.APPROVE_OPTION) {
+	                    File file = fileChoser.getSelectedFile();
+	                    if (garage.LoadData(file.getAbsolutePath())) {
+	                        JOptionPane.showMessageDialog(frame, "Загрузка прошло успешно");
+	                        panelWithGarage.repaint();
+	                    } else {
+	                        JOptionPane.showMessageDialog(frame, "Произошла ошибка");
+	                    }
+	                }
+	            }
+		});
 
 		textField = new JTextField();
 		textField.setBounds(78, 11, 80, 20);
