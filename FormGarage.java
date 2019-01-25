@@ -7,6 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -29,8 +33,9 @@ public class FormGarage extends JFrame {
 	private MultiLevelGarage garage;
 	private final int countLevel = 5;
 	FormTractorConfig select;
+	private static Logger log;
 
-	public FormGarage() throws IOException {
+	public FormGarage() throws SecurityException, IOException {
 		initialize();
 	}
 
@@ -47,8 +52,22 @@ public class FormGarage extends JFrame {
 		});
 	}
 
-	private void initialize() throws IOException {
+	private void initialize() throws SecurityException, IOException {
 
+		log = Logger.getLogger(FormGarage.class.getName());
+		try {
+			FileHandler fh = null;
+			fh = new FileHandler("D://log.txt");
+			log.addHandler(fh);
+			log.setUseParentHandlers(false);
+			SimpleFormatter formatter = new SimpleFormatter();
+			fh.setFormatter(formatter);
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		frame = new JFrame("Garage");
 		frame.setBounds(100, 100, 910, 455);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,16 +111,23 @@ public class FormGarage extends JFrame {
 		buttonSetTractor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				select = new FormTractorConfig(frame);
-				if (select.res()) {
-					ITransport tractor = select.getTractor();
-					if (tractor != null) {
+				try {
+					if (select.res()) {
+						ITransport tractor = select.getTractor();
 						int place = garage.getParking(listLevels.getSelectedIndex()).AddTractor(tractor);
-
-						if (place != -1) {
-							panelWithGarage.repaint();
-						}
+						log.log(Level.INFO, "Create tractor on place " + place);
+						panelWithGarage.repaint();
+						panel.repaint();
 					}
-					panel.repaint();
+				} catch (GarageOverflowException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Garage is full", 0, null);
+					return;
+				} catch (GarageOccupiedPlaceException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "There is tractor On this place", 0, null);
+					return;
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(frame, ex.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+					return;
 				}
 			}
 		});
@@ -136,13 +162,14 @@ public class FormGarage extends JFrame {
 				int numberOfPlace = 0;
 				try {
 					numberOfPlace = Integer.parseInt(textField.getText());
-				} catch (Exception ex) {
-					textField.setText("ERROR");
-					return;
-				}
-				transport = garage.getParking(listLevels.getSelectedIndex()).RemoveTractor(numberOfPlace);
-				if (transport != null) {
+					transport = garage.getParking(listLevels.getSelectedIndex()).RemoveTractor(numberOfPlace);
 					transport.SetPosition(80, 50, panelTakeTractor.getWidth(), panelTakeTractor.getHeight());
+					log.log(Level.INFO, "Tractor was taken from place " + numberOfPlace);
+				} catch (GarageNotFoundException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "There is not tractor", 0, null);
+					return;
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(frame, ex.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
 				}
 				panelTakeTractor.addTractor(transport);
 				panelTakeTractor.repaint();
@@ -171,11 +198,15 @@ public class FormGarage extends JFrame {
                 int ret = fileChoser.showDialog(null, "Сохранить файл");
                 if (ret == JFileChooser.APPROVE_OPTION) {
                     File file = fileChoser.getSelectedFile();
-                    if (garage.SaveData(file.getAbsolutePath())) {
-                        JOptionPane.showMessageDialog(frame, "Сохранение прошло успешно");
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Произошла ошибка");
-                    }
+                    try {
+				if (garage.SaveData(file.getAbsolutePath())) {
+					log.log(Level.INFO, "Garage is saved in  " + file.getAbsolutePath());
+					JOptionPane.showMessageDialog(frame, "Сохранение прошло успешно");
+				}
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Failed", "", 0, null);
+			}
+			panel.repaint();
                 }
             }
 
@@ -187,12 +218,19 @@ public class FormGarage extends JFrame {
 	                int ret = fileChoser.showDialog(null, "Открыть файл");
 	                if (ret == JFileChooser.APPROVE_OPTION) {
 	                    File file = fileChoser.getSelectedFile();
-	                    if (garage.LoadData(file.getAbsolutePath())) {
-	                        JOptionPane.showMessageDialog(frame, "Загрузка прошло успешно");
-	                        panelWithGarage.repaint();
-	                    } else {
-	                        JOptionPane.showMessageDialog(frame, "Произошла ошибка");
-	                    }
+	                    try {
+					if (garage.LoadData(file.getAbsolutePath())) {
+						log.log(Level.INFO, "Garage is loaded from " + file.getAbsolutePath());
+						JOptionPane.showMessageDialog(frame, "Загрузка прошло успешно");
+						garage = new MultiLevelGarage(countLevel, panelWithGarage.getWidth(),
+								panelWithGarage.getHeight());
+						panelWithGarage.repaint();
+						panel.repaint();
+					}
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Failed", "", 0, null);
+				}
+				panel.repaint();
 	                }
 	            }
 		});
