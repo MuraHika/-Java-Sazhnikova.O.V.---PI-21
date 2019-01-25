@@ -43,4 +43,6 @@ public abstract class Vehicle implements ITransport {
 	public abstract void DrawTractor(Graphics g);
 
 	public abstract void MoveTransport(Direction direction);
+	
+	public abstract String getInfo();
 }
