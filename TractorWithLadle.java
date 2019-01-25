@@ -31,6 +31,19 @@ public class TractorWithLadle extends Tractor {
 		GlassColor = glassColor;
 		Crane = crane;
 	}
+	
+	public TractorWithLadle(String info) {
+		super(info);
+		String[] strs = info.split(";");
+		if (strs.length == 12) {
+			MaxSpeed = Integer.parseInt(strs[0]);
+			Weight = Float.parseFloat(strs[1]);
+			MainColor = new Color(Integer.parseInt(strs[2]), Integer.parseInt(strs[3]), Integer.parseInt(strs[4]));
+			DopColor = new Color(Integer.parseInt(strs[5]), Integer.parseInt(strs[6]), Integer.parseInt(strs[7]));
+			GlassColor = new Color(Integer.parseInt(strs[8]), Integer.parseInt(strs[9]), Integer.parseInt(strs[10]));
+			Crane = Boolean.parseBoolean(strs[11]);
+		}
+	}
 
 	public void DrawTractor(Graphics g) {
 
@@ -77,5 +90,11 @@ public class TractorWithLadle extends Tractor {
 	
 	public void SetDopColor(Color color) {
 		DopColor = color;
+	}
+	
+	public String getInfo() {
+		return MaxSpeed + ";" + Weight + ";" + MainColor.getRed() + ";" + MainColor.getGreen() + ";"
+				+ MainColor.getBlue() + ";" + DopColor.getRed() + ";" + DopColor.getGreen() + ";" + DopColor.getBlue()
+				+ ";" + GlassColor.getRed() + ";" + GlassColor.getGreen() + ";" + GlassColor.getBlue() + ";" + Crane;
 	}
 }
