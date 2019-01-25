@@ -12,6 +12,15 @@ public class Tractor extends Vehicle {
 		Weight = weight;
 		MainColor = mainColor;		
 	}
+	
+	public Tractor(String info) {
+		String[] strs = info.split(";");
+		if (strs.length == 5) {
+			MaxSpeed = Integer.parseInt(strs[0]);
+			Weight = Float.parseFloat(strs[1]);
+			MainColor = new Color(Integer.parseInt(strs[2]), Integer.parseInt(strs[3]), Integer.parseInt(strs[4]));
+		}
+	}
 
 	public void MoveTransport(Direction direction) {
 		float step = MaxSpeed * 100 / Weight;
@@ -73,5 +82,10 @@ public class Tractor extends Vehicle {
 		g.setColor(Color.BLACK);
 		g.fillOval(PosX - 50, PosY + 10, 35, 35);
 		g.fillOval(PosX - 10, PosY + 20, 25, 25);
+	}
+	
+	public String getInfo() {
+		return MaxSpeed + ";" + Weight + ";" + MainColor.getRed() + ";" + MainColor.getGreen() + ";"
+				+ MainColor.getBlue();
 	}
 }
