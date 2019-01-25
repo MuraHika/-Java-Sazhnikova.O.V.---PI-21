@@ -75,12 +75,12 @@ public class Garage<T extends ITransport> {
 
 	private void DrawMarking(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, ScreenWidth - 1, ScreenHeight - 1);
+		g.drawRect(0, 0, 638, 399);
 		for (int i = 0; i < _maxCount / 6; i++) {
 			for (int j = 0; j < 7; ++j) {
 				g.drawLine(i * _placeSizeWidth, j * _placeSizeHeight, i * _placeSizeWidth + 110, j * _placeSizeHeight);
 			}
-			g.drawLine(i * _placeSizeWidth, 0, i * _placeSizeWidth, ScreenHeight);
+			g.drawLine(i * _placeSizeWidth, 0, i * _placeSizeWidth, 399);
 		}
 	}
 	
@@ -89,6 +89,14 @@ public class Garage<T extends ITransport> {
 			return _places.get(index);
 		} else {
 			return null;
+		}
+	}
+	
+	public void setTractor(int ind, T t) {
+		if (checkFreePlace(ind)) {
+			_places.put(ind, t);
+			_places.get(ind).SetPosition(5 + ind / 5 * _placeSizeWidth + 5 + 50, ind % 5 * _placeSizeHeight + 35,
+					ScreenWidth, ScreenHeight);
 		}
 	}
 }
