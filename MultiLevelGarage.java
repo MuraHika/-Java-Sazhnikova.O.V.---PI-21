@@ -1,3 +1,8 @@
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class MultiLevelGarage {
@@ -81,7 +86,7 @@ public class MultiLevelGarage {
 		}
 	}
 
-    public boolean LoadData(String filename) {
+    public boolean LoadData(String filename) throws GarageOverflowException, GarageOccupiedPlaceException {{
     	File file = new File(filename);
 		if (!file.exists()) {
 			return false;
